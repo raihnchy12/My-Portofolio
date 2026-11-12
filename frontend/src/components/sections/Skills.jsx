@@ -91,12 +91,24 @@ const SOFT_SKILLS = [
   {
     title: 'Integritas & Amanah',
     desc: 'Menjunjung tinggi kejujuran, tanggung jawab, dan etika kerja yang kuat dalam setiap proyek maupun kolaborasi tim.',
-    points: ['Komitmen tinggi pada kualitas kode & deadline', 'Transparan dalam progress dan kendala teknis', 'Bertanggung jawab penuh atas maintainability sistem'],
+    points: [
+      'Komitmen tinggi pada kualitas kode & deadline', 
+      'Transparan dalam progress dan kendala teknis', 
+      'Bertanggung jawab penuh atas maintainability sistem',
+      'Menjaga kerahasiaan data serta keamanan aset digital klien',
+      'Konsisten menjunjung tinggi etika profesional dalam setiap kolaborasi'
+    ],
   },
   {
     title: 'Adaptabilitas & Problem Solving',
     desc: 'Cepat beradaptasi dengan teknologi baru, teliti dalam debugging, serta solutif dalam menghadapi tantangan teknis maupun kerja tim.',
-    points: ['Cepat mempelajari tech stack & arsitektur baru', 'Analitis dan terstruktur dalam proses debugging', 'Berorientasi pada solusi saat menghadapi blocker'],
+    points: [
+      'Cepat mempelajari tech stack & arsitektur baru', 
+      'Analitis dan terstruktur dalam proses debugging', 
+      'Berorientasi pada solusi saat menghadapi blocker',
+      'Fleksibel dan tanggap dalam menyesuaikan alur kerja di tengah perubahan project',  
+      'Proaktif mengeksplorasi praktik terbaik (best practices) untuk efisiensi kode'  
+    ],
   },
 ]
 

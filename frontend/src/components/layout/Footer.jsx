@@ -39,12 +39,6 @@ const ChevronUp = ({ className = 'w-4 h-4' }) => (
   </svg>
 )
 
-const HeartIcon = ({ className = 'w-3.5 h-3.5' }) => (
-  <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-  </svg>
-)
-
 const CopyIcon = ({ className = 'w-4 h-4' }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
@@ -138,7 +132,7 @@ export default function Footer() {
     },
     {
       name: 'Instagram',
-      handle: '@raihnchy',
+      handle: '@raihnchy_',
       href: 'https://instagram.com/raihnchy_',
       icon: InstagramIcon,
       type: 'external',
@@ -219,8 +213,15 @@ export default function Footer() {
           {/* Brand & Tagline Column */}
           <div className="lg:col-span-5">
             <a href="#" className="group inline-flex items-center gap-3 focus:outline-none">
-              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-900 font-serif text-2xl font-extrabold italic text-white shadow-md shadow-slate-900/10 dark:bg-white dark:text-black dark:shadow-white/5">
-                R
+              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-black p-2.5 shadow-md shadow-slate-900/10 dark:bg-white dark:shadow-white/5 transition-colors duration-300">
+                <svg 
+                  className="h-full w-full fill-white dark:fill-black transition-colors duration-300" 
+                  viewBox="0 0 736 736" 
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M 84 84 C 106 166 178 230 292 230 L 490 230 C 530 230 562 262 562 302 C 562 342 530 374 490 374 L 418 374 C 532 448 616 462 616 462 C 712 376 706 236 642 156 C 580 84 480 84 378 84 Z" />
+                  <path d="M 104 336 C 166 336 224 346 292 374 C 352 398 430 462 540 572 L 636 672 L 458 672 C 346 564 252 462 176 414 C 136 388 112 364 104 336 Z" />
+                </svg>
               </span>
               <div className="flex flex-col">
                 <span className="text-base font-bold tracking-wider text-slate-900 dark:text-white">
@@ -303,12 +304,6 @@ export default function Footer() {
           <p className="order-2 text-center sm:order-1 sm:text-left">
             © {new Date().getFullYear()} <span className="font-medium text-slate-700 dark:text-slate-300">{brandName}</span>. All rights reserved.
           </p>
-
-          <div className="order-1 flex items-center gap-1.5 sm:order-2">
-            <span>Designed & Built with</span>
-            <HeartIcon className="h-3.5 w-3.5 text-rose-500 animate-pulse" />
-            <span>passion</span>
-          </div>
 
           <button
             type="button"

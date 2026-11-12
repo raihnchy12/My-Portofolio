@@ -20,7 +20,20 @@ export default function Navbar({ dark, onToggleTheme }) {
     >
       <nav className="flex w-full max-w-6xl items-center justify-between gap-3 rounded-full border border-white/50 bg-white/60 p-2 shadow-lg shadow-black/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/10 sm:px-3">
         <a href="#" className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-black font-serif text-xl italic text-white dark:bg-white dark:text-black">R</span>
+          {/* Kotak Logo dengan Logo R Custom yang Jaraknya Direnggangkan */}
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-black dark:bg-white p-2 shadow-md transition-colors duration-300">
+            <svg 
+              className="h-full w-full fill-white dark:fill-black transition-colors duration-300" 
+              viewBox="0 0 736 736" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {/* Kepala Loop Atas */}
+              <path d="M 84 84 C 106 166 178 230 292 230 L 490 230 C 530 230 562 262 562 302 C 562 342 530 374 490 374 L 418 374 C 532 448 616 462 616 462 C 712 376 706 236 642 156 C 580 84 480 84 378 84 Z" />
+              
+              {/* Kaki Sayap Bawah (Direnggangkan jaraknya ke bawah) */}
+              <path d="M 104 336 C 166 336 224 346 292 374 C 352 398 430 462 540 572 L 636 672 L 458 672 C 346 564 252 462 176 414 C 136 388 112 364 104 336 Z" />
+            </svg>
+          </div>
           <span className="text-sm font-semibold tracking-wider">RAIHAN</span>
         </a>
 

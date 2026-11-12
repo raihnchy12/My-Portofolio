@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import LineBackground from '../ui/LineBackground'
 import useTypewriter from '../../hooks/useTypewriter'
 import photo from '../../assets/raihan-batik.jpeg'
+import photoJas from '../../assets/raihan-jas.png'
 import CountUp from '../ui/CountUp'
 
 export default function About() {
@@ -9,18 +10,21 @@ export default function About() {
   const [cardPos, setCardPos] = useState({ x: 0, y: 0 })
   const [hasDropped, setHasDropped] = useState(false)
   
+  const [hasEntered, setHasEntered] = useState(false)
+  
   const constraintsRef = useRef(null)
   const sectionRef = useRef(null)
 
-  // Menggunakan hook useTypewriter yang sama seperti di Work Gallery
   const [titleRef, typed] = useTypewriter('Junior Full-Stack Developer')
 
-  // Trigger animasi jatuh dari atas saat scroll memasuki section About
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setHasDropped(true)
+          setHasEntered(true)
+        } else {
+          setHasEntered(false)
         }
       },
       { threshold: 0.3 }
@@ -37,12 +41,46 @@ export default function About() {
     }
   }, [])
 
-  // Handle ketika mouse ditarik bebas ke segala arah (360 derajat)
+  // Isi teks 3 paragraf bio
+  const bioP1 = "Halo! Saya Raihan Nurcahyo, Junior Full-Stack Developer asal Jakarta yang menempuh pendidikan di Pondok IT. Latar belakang kepesantrenan menanamkan prinsip integritas, kejujuran, dan amanah yang kuat dalam diri saya. Saya memegang teguh etika kerja yang bersih, transparan, dan profesional dalam setiap tanggung jawab yang diembankan."
+  const bioP2 = "Dari sisi teknis, saya terbiasa membangun aplikasi web interaktif, sistem berbasis database, dan integrasi API menggunakan teknologi modern seperti React, Node.js, PostgreSQL, dan TypeScript. Dengan memadukan keahlian teknis dan komitmen moral yang tinggi, saya siap menghadirkan solusi digital yang andal dan tepercaya."
+  const bioP3 = "Saat ini, saya terus mengasah keterampilan pengembangan perangkat lunak untuk menghadirkan karya digital yang berdampak positif dan solutif."
+
+  // Hitung jumlah kata per paragraf untuk menentukan urutan delay beruntun
+  const wordsP1 = bioP1.split(' ')
+  const wordsP2 = bioP2.split(' ')
+
+  // Helper render teks dengan urutan beruntun antar paragraf
+  const renderSequentialParagraph = (text, baseDelay) => {
+    const words = text.split(' ')
+    return words.map((word, i) => {
+      const delay = baseDelay + i * 25 // Kecepatan per kata
+      return (
+        <span
+          key={i}
+          style={{ transitionDelay: `${delay}ms` }}
+          className={`inline-block mr-1 transition-colors duration-700 ease-out text-gray-600 dark:text-slate-300 md:text-gray-600 md:dark:text-slate-300 ${
+            hasEntered 
+              ? 'md:text-gray-600 md:dark:text-slate-300 md:font-normal' 
+              : 'md:text-gray-400/30 md:dark:text-slate-700/50 md:select-none'
+          }`}
+        >
+          {word}
+        </span>
+      )
+    })
+  }
+
+  // Jeda awal masing-masing paragraf berdasarkan panjang teks sebelumnya
+  const delayP1 = 100
+  const delayP2 = delayP1 + wordsP1.length * 25 + 150
+  const delayP3 = delayP2 + wordsP2.length * 25 + 150
+
   const handleMouseMove = (e) => {
     if (!isDragging) return
     const rect = constraintsRef.current.getBoundingClientRect()
     const x = e.clientX - rect.left - 140
-    const y = e.clientY - rect.top - 80
+    const y = e.clientY - rect.top - 140
     
     const maxPull = 500
     const distance = Math.sqrt(x * x + y * y)
@@ -56,25 +94,38 @@ export default function About() {
     setCardPos({ x: 0, y: 0 })
   }
 
-  // Koordinat tali lanyard elastis
+  const handleTouchMove = (e) => {
+    if (!isDragging || !e.touches[0]) return
+    const rect = constraintsRef.current.getBoundingClientRect()
+    const touch = e.touches[0]
+    const x = touch.clientX - rect.left - 140
+    const y = touch.clientY - rect.top - 140
+    
+    const maxPull = 500
+    const distance = Math.sqrt(x * x + y * y)
+    if (distance < maxPull) {
+      setCardPos({ x, y })
+    }
+  }
+
+  const handleTouchEnd = () => {
+    setIsDragging(false)
+    setCardPos({ x: 0, y: 0 })
+  }
+
   const startX = 144
   const startY = 10
   const endX = 144 + cardPos.x
-  const endY = 85 + cardPos.y
+  const endY = 145 + cardPos.y
   const controlX = startX + (endX - startX) / 2 + (cardPos.x * 0.25)
-  const controlY = startY + (endY - startY) / 2 + (cardPos.y * 0.25) + Math.max(30, Math.abs(cardPos.y) * 0.3)
+  const controlY = startY + (endY - startY) / 2 + (cardPos.y * 0.25) + Math.max(40, Math.abs(cardPos.y) * 0.3)
   const lanyardPath = `M ${startX} ${startY} Q ${controlX} ${controlY} ${endX} ${endY}`
 
-  // --- PERHITUNGAN DYNAMIC DROP SHADOW & ELEVASI ---
   const pullDistance = Math.sqrt(cardPos.x * cardPos.x + cardPos.y * cardPos.y)
-  
-  // Shadow Offset & Blur berbanding lurus dengan jarak tarikan
   const shadowX = (cardPos.x * 0.12).toFixed(1)
   const shadowY = (20 + cardPos.y * 0.12 + pullDistance * 0.15).toFixed(1)
   const shadowBlur = (18 + pullDistance * 0.12).toFixed(1)
   const shadowOpacity = Math.max(0.08, 0.25 - pullDistance * 0.0003).toFixed(2)
-
-  // Scale sedikit membesar saat ditarik untuk efek elevasi 3D 
   const cardScale = isDragging ? 1 + Math.min(pullDistance * 0.0004, 0.08) : 1
 
   return (
@@ -84,12 +135,12 @@ export default function About() {
       className="relative isolate overflow-hidden bg-white text-gray-900 transition-colors duration-300 dark:bg-[#0b0d12] dark:text-white px-5 py-24 sm:px-8"
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
-      {/* Background garis abstrak */}
       <LineBackground key="about-waves-bg" variant="waves" tone="auto" />
       
       <div className="relative z-10 mx-auto max-w-6xl">
-        {/* Header Section (Disamakan strukturnya dengan Work Gallery) */}
         <div className="mb-16">
           <p className="text-xs font-medium uppercase tracking-[0.3em] text-gray-500 dark:text-slate-400">About Me</p>
           <h2 ref={titleRef} aria-label="Junior Full-Stack Developer" className="mt-3 min-h-[1.15em] text-4xl font-extrabold tracking-tight sm:text-6xl">
@@ -98,27 +149,23 @@ export default function About() {
           </h2>
         </div>
 
-        {/* Main Content Layout */}
         <div className="grid gap-12 lg:grid-cols-12 lg:items-start">
           
-          {/* Kolom Kiri & Tengah: Foto, Info, Bio, & Resume */}
           <div className="lg:col-span-8 space-y-8">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-              {/* Foto Profil Lingkaran Utama */}
+              {/* Foto Profil About Me menggunakan photoJas */}
               <div className="relative h-24 w-24 sm:h-28 sm:w-28 flex-shrink-0 overflow-hidden rounded-full border-2 border-black/15 bg-black dark:border-white/20 dark:bg-white shadow-lg">
                 <img 
-                  src={photo} 
+                  src={photoJas} 
                   alt="Raihan Nurcahyo" 
                   className="h-full w-full object-cover scale-125"
                   style={{ objectPosition: '50% 105%' }}
                 />
               </div>
 
-              {/* Nama & Statistik */}
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-xl sm:text-2xl font-bold tracking-wide">RAIHAN NURCAHYO</h3>
-                  {/* Badge Verified: terang = lingkaran hitam + ceklis biru terang, gelap = lingkaran biru + ceklis putih */}
                   <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
                     <circle cx="12" cy="12" r="12" className="fill-black dark:fill-blue-500" />
                     <path
@@ -135,7 +182,7 @@ export default function About() {
                 <div className="mt-4 flex flex-wrap gap-6 text-xs sm:text-sm">
                   <div>
                     <span className="block text-gray-500 dark:text-slate-400 font-medium">PROJECTS</span>
-                    <CountUp to={3} className="text-lg font-bold" />
+                    <CountUp to={4} className="text-lg font-bold" />
                   </div>
                   <div className="border-l border-black/10 dark:border-white/10 pl-6">
                     <span className="block text-gray-500 dark:text-slate-400 font-medium">CERTIFICATES</span>
@@ -149,17 +196,13 @@ export default function About() {
               </div>
             </div>
 
-            {/* Paragraf Bio */}
+            {/* Paragraf Bio dengan Animasi Berurutan (Paragraf 1 -> Paragraf 2 -> Paragraf 3) */}
             <div className="space-y-4 text-sm sm:text-base leading-relaxed text-gray-600 dark:text-slate-300">
-              <p>
-                Halo! Saya <strong>Raihan Nurcahyo</strong>, Junior Full-Stack Developer asal Bantul yang menempuh pendidikan di <strong>Pondok IT</strong>. Latar belakang kepesantrenan menanamkan prinsip integritas, kejujuran, dan amanah yang kuat dalam diri saya. Saya memegang teguh etika kerja yang bersih, transparan, dan profesional dalam setiap tanggung jawab yang diembankan.
-              </p>
-              <p>
-                Dari sisi teknis, saya terbiasa membangun aplikasi web interaktif, sistem berbasis database, dan integrasi API menggunakan teknologi modern seperti React, Node.js, PostgreSQL, dan TypeScript. Dengan memadukan keahlian teknis dan komitmen moral yang tinggi, saya siap menghadirkan solusi digital yang andal dan tepercaya.
-              </p>
+              <p>{renderSequentialParagraph(bioP1, delayP1)}</p>
+              <p>{renderSequentialParagraph(bioP2, delayP2)}</p>
+              <p>{renderSequentialParagraph(bioP3, delayP3)}</p>
             </div>
 
-            {/* Download Resume Link */}
             <div>
               <p className="text-sm text-gray-600 dark:text-slate-400">
                 Ingin tahu lebih banyak tentang pengalaman saya?{' '}
@@ -170,13 +213,11 @@ export default function About() {
             </div>
           </div>
 
-          {/* Kolom Kanan: ID Card Tanda Santri dengan Dynamic Drop Shadow */}
-          <div className="lg:col-span-4 flex justify-center lg:justify-end -mt-16 lg:-mt-36">
+          <div className="lg:col-span-4 flex justify-center lg:justify-end -mt-10 lg:-mt-24">
             <div 
               ref={constraintsRef} 
-              className="relative w-72 h-[620px] flex flex-col items-center select-none pt-2"
+              className="relative w-72 h-[680px] flex flex-col items-center select-none pt-2 touch-none"
             >
-              {/* SVG Tali Lanyard Klasik dengan Bayangan Dinamis */}
               <svg className="absolute top-0 left-0 w-full h-full pointer-events-none z-0 overflow-visible">
                 <path 
                   d={lanyardPath} 
@@ -186,7 +227,7 @@ export default function About() {
                   strokeLinecap="round"
                   style={{
                     filter: `blur(4px)`,
-                    transform: `translate(${shadowX * 0.5}px, ${shadowY * 0.5}px)`
+                    transform: `translate(${Number(shadowX) - 0.5}px, ${Number(shadowY) - 0.5}px)`
                   }}
                 />
                 <path 
@@ -207,12 +248,11 @@ export default function About() {
                 />
               </svg>
 
-              {/* Klip Logam Pengait */}
               <div 
                 className="absolute z-10 flex flex-col items-center transition-all duration-75 ease-out pointer-events-none"
                 style={{
                   transform: `translate(${cardPos.x}px, ${cardPos.y}px)`,
-                  top: '85px',
+                  top: '145px',
                   left: '144px',
                   marginLeft: '-12px'
                 }}
@@ -221,9 +261,9 @@ export default function About() {
                 <div className="w-3 h-5 bg-gradient-to-r from-zinc-500 via-zinc-300 to-zinc-600 rounded-full shadow-inner -mt-0.5 border border-zinc-700"></div>
               </div>
 
-              {/* Kartu Tanda Santri dengan Dynamic Drop Shadow */}
               <div 
                 onMouseDown={() => setIsDragging(true)}
+                onTouchStart={() => setIsDragging(true)}
                 style={{
                   transform: isDragging 
                     ? `translate(${cardPos.x}px, ${cardPos.y}px) scale(${cardScale})` 
@@ -238,14 +278,12 @@ export default function About() {
                     ? 'box-shadow 0.05s ease-out' 
                     : 'transform 1.4s cubic-bezier(0.175, 1.85, 0.32, 1.2), opacity 0.8s ease-out, box-shadow 0.6s ease-out'
                 }}
-                className="relative z-20 mt-20 w-60 h-96 rounded-2xl bg-white text-gray-900 p-4 border border-black/15 cursor-grab active:cursor-grabbing flex flex-col justify-between overflow-hidden group"
+                className="relative z-20 mt-28 w-60 h-96 rounded-2xl bg-white text-gray-900 p-4 border border-black/15 cursor-grab active:cursor-grabbing flex flex-col justify-between overflow-hidden group"
               >
-                {/* Holder Plastik Transparan di Atas */}
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-4 rounded border border-black/20 bg-black/5 backdrop-blur-sm shadow-sm pointer-events-none flex items-center justify-center">
                   <div className="w-6 h-1 bg-black/30 rounded-full"></div>
                 </div>
 
-                {/* Header Kartu: Logo PIT & KARTU TANDA SANTRI */}
                 <div className="flex items-center justify-between border-b border-gray-200 pb-2">
                   <div className="flex items-center gap-1.5">
                     <div className="w-6 h-5 rounded bg-blue-700 flex items-center justify-center text-white text-[8px] font-bold tracking-tighter">PIT</div>
@@ -257,8 +295,8 @@ export default function About() {
                   </div>
                 </div>
 
-                {/* Bagian Tengah: Foto Profil & Identitas */}
                 <div className="flex flex-col items-center my-auto py-2">
+                  {/* Foto di Name Tag menggunakan photo batik */}
                   <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-blue-600 shadow-md bg-gray-100">
                     <img 
                       src={photo} 
@@ -279,7 +317,6 @@ export default function About() {
                   </p>
                 </div>
 
-                {/* Bagian Bawah: Aksen Samping & QR Code di Tengah */}
                 <div className="pt-2 border-t border-gray-200 flex items-center justify-between gap-1.5">
                   <div className="flex-1 h-7 bg-slate-900 rounded-sm"></div>
                   
@@ -304,7 +341,6 @@ export default function About() {
           </div>
 
         </div>
-
       </div>
     </section>
   )
