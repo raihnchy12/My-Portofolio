@@ -42,7 +42,7 @@ export default function About() {
   }, [])
 
   // Isi teks 3 paragraf bio
-  const bioP1 = "Halo! Saya Raihan Nurcahyo, Junior Full-Stack Developer asal Jakarta yang menempuh pendidikan di Pondok IT. Latar belakang kepesantrenan menanamkan prinsip integritas, kejujuran, dan amanah yang kuat dalam diri saya. Saya memegang teguh etika kerja yang bersih, transparan, dan profesional dalam setiap tanggung jawab yang diembankan."
+  const bioP1 = "Halo! Saya Raihan Nurcahyo, Junior Full-Stack Developer asal Jakarta yang menempuh pendidikan di Pondok IT Yogyakarta. Latar belakang kepesantrenan menanamkan prinsip integritas, kejujuran, dan amanah yang kuat dalam diri saya. Saya memegang teguh etika kerja yang bersih, transparan, dan profesional dalam setiap tanggung jawab yang diembankan."
   const bioP2 = "Dari sisi teknis, saya terbiasa membangun aplikasi web interaktif, sistem berbasis database, dan integrasi API menggunakan teknologi modern seperti React, Node.js, PostgreSQL, dan TypeScript. Dengan memadukan keahlian teknis dan komitmen moral yang tinggi, saya siap menghadirkan solusi digital yang andal dan tepercaya."
   const bioP3 = "Saat ini, saya terus mengasah keterampilan pengembangan perangkat lunak untuk menghadirkan karya digital yang berdampak positif dan solutif."
 
